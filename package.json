@@ -1,0 +1,24 @@
+{
+    "name": "bosta-assessment",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "nodemon index.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "bull": "^4.7.0",
+        "crypto": "^1.0.1",
+        "express": "^4.17.3",
+        "express-handlebars": "^6.0.3",
+        "nodemailer": "^6.7.2",
+        "passport-custom": "^1.1.1",
+        "passport-local": "^1.0.0",
+        "uuid": "^8.3.2"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.15"
+    }
+}
