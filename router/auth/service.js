@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs")
 const crypto = require("crypto")
 const CustomStrategy = require("passport-custom")
 const passport = require("passport")
-const validator = require("./../../utils/regexValidator")
+const validator = require("./../../utils/validator")
 const Mailer = require("./../../services/Email/mailer")
 const User = require("./../../models/User")
 const { send } = require("process")
@@ -14,7 +14,6 @@ passport.use("stateless", new CustomStrategy((req, done) => {
     User.findOne({ email: email }, (err, user) => {
         if (err) return done(err)
         if (!user) return done(null, false, { message: "Incorrect information." })
-        console.log(user)
         if (!user.verified) return done(null, false, { message: "Account need to be verified." })
             // User found, lets validate
         bcrypt.compare(password, user.password, (err, res) => {
@@ -40,7 +39,6 @@ passport.deserializeUser((id, done) => {
 
 const postRegister = async(req, res) => {
     const { name, email, password } = req.body
-    console.log(req.body)
     if (!(validator.isValidName(name) && validator.isValidEmail(email) && password != "")) {
         res.status(403).send("Complete the form")
         return

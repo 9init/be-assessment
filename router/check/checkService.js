@@ -1,8 +1,8 @@
 const Checks = require("./../../models/Checks")
 
-function putCheck(req, res) {
-    console.log("checks")
-    const newCheck = new Checks({
+function generateCheckFromRequest(req) {
+
+    return new Checks({
         owner_id: req.user._id,
         name: req.body.name,
         url: req.body.url,
@@ -18,13 +18,42 @@ function putCheck(req, res) {
         tags: req.body.tags,
         ignoreSSL: req.body.ignoreSSL,
     })
+}
 
+function putCheck(req, res) {
+    const newCheck = generateCheckFromRequest(req)
+    console.log(newCheck)
     newCheck.save((err) => {
         if (err) return res.status(500).send(`Internal server error. ${err}`)
         res.send({ state: "INSERTED" })
+        console.log(newCheck)
+    })
+}
+
+function getChecks(req, res) {
+    Checks.find({ owner_id: req.user.id }, null, null, (err, result) => {
+        if (err) return res.state(500).send({ state: "ERROR" })
+        res.send({ check: result })
+    })
+}
+
+function getCheck(req, res) {
+    Checks.findOne({ owner_id: req.user.id, _id: req.body.id }, null, null, (err, result) => {
+        if (err) return res.state(500).send({ state: "ERROR" })
+        res.send({ check: result })
+    })
+}
+
+function deleteCheck(req, res) {
+    Checks.findOneAndRemove({ owner_id: req.user.id, _id: req.body.id }, (err, doc, db_res) => {
+        if (err || !doc) return res.send({ state: "ERROR" })
+        return res.send({ state: "DELETED" })
     })
 }
 
 module.exports = {
-    PutCheck: putCheck
+    PutCheck: putCheck,
+    DeleteCheck: deleteCheck,
+    GetCheck: getCheck,
+    GetChecks: getChecks
 }

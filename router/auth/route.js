@@ -13,7 +13,6 @@ const noAuthLink = ["login", "register", "verify"]
 function isLoggedIn(req, res, next) {
     const url = req.url.split("/", 2)[1] || ""
     if (req.isAuthenticated() || noAuthLink.includes(url)) { return next() }
-    console.log("redirect")
     res.redirect("/login")
 }
 
