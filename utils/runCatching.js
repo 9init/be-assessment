@@ -2,7 +2,7 @@ function runCatching(func) {
     try {
         func()
     } catch (err) {
-        throw err
+        console.error(err)
     }
 }
 

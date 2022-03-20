@@ -31,27 +31,27 @@ async function handleWorker(response, check, interval, intervalPeriod) {
         // check if check is exist, otherwise its maybe deleted or invalid id
         if (db_err || !report) return clearInterval(interval)
 
-        // calculate uptime, downtime and outages 
-        const upTimeToBeAdded = report.uptime == -1 ? 0 : intervalPeriod + report.uptime
-        const newUptime = response.error ? report.uptime : upTimeToBeAdded
-        const newDowntime = response.error ? intervalPeriod + report.downtime : report.downtime
-        const newOutages = response.error ? report.outages + 1 : report.outages
+        // calculate uptime and downtime 
+        const uptimeToBeAdded = report.uptime == -1 ? 0 : intervalPeriod + report.uptime
+        const downtimeToBeAdded = report.downtime == -1 ? 0 : intervalPeriod + report.downtime
+        const newUptime = response.error ? report.uptime : uptimeToBeAdded
+        const newDowntime = response.error ? downtimeToBeAdded : report.downtime
 
-        // calculate successes, failures and availability
-        const newFailures = response.error ? report.failures + 1 : report.failures
-        const newSuccesses = response.error ? report.successes : report.successes + 1
-        const newAvailability = 100 * newSuccesses / (newSuccesses + newFailures) || 0
+        // calculate reaches, outages and availability
+        const newOutages = response.error ? report.outages + 1 : report.outages
+        const newReaches = response.error ? report.reaches : report.reaches + 1
+        const newAvailability = 100 * newReaches / (newReaches + newOutages) || 0
 
         // get duration in millisecond
         const durationMS = response.error ? 0 : response.headers['request-duration']
 
         // calculate response time
         const newResponseTimes = response.error ? report.responseTimes : [...report.responseTimes, durationMS]
-        const newAverageResponseTime = newResponseTimes.reduce((a, b) => a + b, 0) / newResponseTimes.length
+        const newAverageResponseTime = newResponseTimes.reduce((a, b) => a + b, 0) / newResponseTimes.length || -1
 
         // create log and add it to history
 
-        const status = response.error && response.response ? response.response.status : response.status || 400
+        const status = response.error && response.response ? response.response.status : response.status || "SERVER_NOT_FOUND"
         const log = `${new Date(Date.now())} ${response.config.method.toUpperCase()} ${status} ${response.config.url} ${String(check.protocol).toUpperCase()} ${durationMS} ms`
         const logs = [...report.history, log]
 
@@ -64,8 +64,7 @@ async function handleWorker(response, check, interval, intervalPeriod) {
             uptime: newUptime,
             downtime: newDowntime,
             outages: newOutages,
-            failures: newFailures,
-            successes: newSuccesses,
+            reaches: newReaches,
             responseTimes: newResponseTimes,
             responseTime: newAverageResponseTime + "ms",
             history: logs
