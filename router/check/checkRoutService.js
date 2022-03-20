@@ -1,7 +1,8 @@
 const Checks = require("./../../models/Checks")
+const Report = require("./../../models/Report")
+const CheckService = require("./../../services/Check/service")
 
 function generateCheckFromRequest(req) {
-
     return new Checks({
         owner_id: req.user._id,
         name: req.body.name,
@@ -22,11 +23,17 @@ function generateCheckFromRequest(req) {
 
 function putCheck(req, res) {
     const newCheck = generateCheckFromRequest(req)
-    console.log(newCheck)
     newCheck.save((err) => {
         if (err) return res.status(500).send(`Internal server error. ${err}`)
-        res.send({ state: "INSERTED" })
-        console.log(newCheck)
+        newReport = new Report({
+            check_id: newCheck.id,
+            owner_id: newCheck.owner_id
+        })
+        newReport.save((err) => {
+            if (err) return res.status(500).send(`Internal server error. ${err}`)
+            res.send({ state: "We will notify you when check is ready" })
+            CheckService.runCheckWorker(newCheck)
+        })
     })
 }
 

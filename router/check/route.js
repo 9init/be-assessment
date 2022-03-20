@@ -1,11 +1,18 @@
 const router = require("express").Router()
 
-// Routes
-const checkService = require("./checkService")
+// Route Services
+const checkRoutService = require("./checkRoutService")
+const reportRoutService = require("./reportRoutService")
 
-router.put("/check", checkService.PutCheck)
-router.delete("/delete", checkService.DeleteCheck)
-router.get("/check", checkService.GetCheck)
-router.get("/checks", checkService.GetChecks)
+// Check routes
+router.put("/check", checkRoutService.PutCheck)
+router.delete("/delete", checkRoutService.DeleteCheck)
+router.get("/check", checkRoutService.GetCheck)
+router.get("/checks", checkRoutService.GetChecks)
+
+// Report routes
+router.get("/report/:reportId", reportRoutService.getReport)
+router.get("/reports", reportRoutService.getReports)
+router.get("/reportByTag", reportRoutService.getReportsByTag)
 
 module.exports = router

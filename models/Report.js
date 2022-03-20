@@ -1,14 +1,18 @@
 const mongoose = require("mongoose")
 
 const ReportSchema = new mongoose.Schema({
-    statue: { type: String, required: true, enum: ["Up", "Down"] },
+    owner_id: { type: String, required: true },
+    check_id: { type: String, required: true },
+    status: { type: String, required: true, enum: ["Up", "Down"], default: "Down" },
     availability: { type: String, required: true, default: 0 },
     outages: { type: Number, required: true, default: 0 },
     downtime: { type: Number, required: true, default: 0 },
-    uptime: { type: Number, required: true, default: 0 },
-    responseTime: { type: Number, required: true, default: 0 },
+    uptime: { type: Number, required: true, default: -1 },
+    successes: { type: Number, required: true, default: 0 },
+    failures: { type: Number, required: true, default: 0 },
+    responseTime: { type: String, required: true, default: 0 },
+    responseTimes: { type: [Number], required: true, default: [] },
     history: { type: [String], required: true, default: [] },
-    check_id: { type: String, required: true }
 })
 
 module.exports = mongoose.model('Report', ReportSchema)
