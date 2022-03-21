@@ -38,14 +38,14 @@ function putCheck(req, res) {
 }
 
 function getChecks(req, res) {
-    Checks.find({ owner_id: req.user.id }, null, null, (err, result) => {
+    Checks.find({ owner_id: req.user.id }, { __v: 0 }, null, (err, result) => {
         if (err) return res.status(500).send({ message: "ERROR" })
         res.send({ check: result })
     })
 }
 
 function getCheck(req, res) {
-    Checks.findOne({ owner_id: req.user.id, _id: req.params.checkId }, null, null, (err, result) => {
+    Checks.findOne({ owner_id: req.user.id, _id: req.params.checkId }, { __v: 0 }, null, (err, result) => {
         if (err) return res.status(500).send({ message: "ERROR" })
         res.send({ check: result })
     })
