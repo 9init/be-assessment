@@ -47,7 +47,6 @@ async function handleWorker(response, check, interval, intervalPeriod) {
         const newAverageResponseTime = newResponseTimes.reduce((a, b) => a + b, 0) / newResponseTimes.length || -1
 
         // create log and add it to history
-
         const status = response.error && response.response ? response.response.status : response.status || "SERVER_NOT_FOUND"
         const log = `${new Date(Date.now())} ${response.config.method.toUpperCase()} ${status} ${response.config.url} ${String(check.protocol).toUpperCase()} ${durationMS} ms`
         const logs = [...report.history, log]

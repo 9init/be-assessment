@@ -9,7 +9,7 @@ const CheckSchema = new mongoose.Schema({
     path: { type: String, required: true, default: "/" },
     port: { type: Number, required: false, default: null },
     timeout: { type: Number, required: false, default: 5 * 1000 },
-    interval: { type: Number, required: false, default: 1000 * 60 * 0.5 },
+    interval: { type: Number, required: false, default: 1000 * 60 * 10 },
     threshold: { type: Number, required: false, default: 1 },
     authentication: { type: Object, required: false, default: null },
     httpHeaders: { type: Object, required: false, default: null },

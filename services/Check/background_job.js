@@ -27,12 +27,6 @@ setIntervalX(interval + timeout, (intervalObj) => {
         if (httpHeaders)
             headersToBeSent = {...headersToBeSent, ...httpHeaders }
 
-        const source = CancelToken.source();
-        setTimeout(() => {
-            source.cancel();
-        }, timeout)
-
-
         // setting https agent
         const agent = new https.Agent({
             rejectUnauthorized: ignoreSSL
@@ -42,7 +36,7 @@ setIntervalX(interval + timeout, (intervalObj) => {
         axios
             .get(URL, {
                 headers: headersToBeSent,
-                cancelToken: source.token,
+                timeout: timeout,
                 httpsAgent: agent
             })
             .then((response) =>
