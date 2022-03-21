@@ -5,9 +5,12 @@ const checkRoutService = require("./checkRoutService")
 const reportRoutService = require("./reportRoutService")
 
 // Check routes
-router.put("/check", checkRoutService.PutCheck)
+router.post("/update/check/:checkId", checkRoutService.PostUpdateCheck)
+router.post("/start/check/:checkId", checkRoutService.PostStartCheck)
+router.post("/pause/check/:checkId", checkRoutService.PostPauseCheck)
 router.delete("/delete", checkRoutService.DeleteCheck)
-router.get("/check", checkRoutService.GetCheck)
+router.put("/check", checkRoutService.PutCheck)
+router.get("/check/:checkId", checkRoutService.GetCheck)
 router.get("/checks", checkRoutService.GetChecks)
 
 // Report routes

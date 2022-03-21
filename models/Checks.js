@@ -5,7 +5,7 @@ const CheckSchema = new mongoose.Schema({
     owner_id: { type: String, required: true },
     name: { type: String, required: true, default: uuidv4() },
     url: { type: String, required: true },
-    protocol: { type: String, required: true, default: "http", enum: ["http", "https", "tcp"] },
+    protocol: { type: String, required: true, default: "http", enum: ["http", "https"] },
     path: { type: String, required: true, default: "/" },
     port: { type: Number, required: false, default: null },
     timeout: { type: Number, required: false, default: 5 * 1000 },
@@ -15,7 +15,8 @@ const CheckSchema = new mongoose.Schema({
     httpHeaders: { type: Object, required: false, default: null },
     assert: { type: Object, required: false, default: null },
     tags: { type: [{ tag: { type: String } }], required: false, default: [] },
-    ignoreSSL: { type: Boolean, require: false, default: false }
+    ignoreSSL: { type: Boolean, require: false, default: false },
+    isRunning: { type: Boolean, required: false, default: true }
 })
 
 module.exports = mongoose.model("Check", CheckSchema)

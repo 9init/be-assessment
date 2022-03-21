@@ -1,19 +1,50 @@
-const runCatching = require("./../../utils/runCatching")
+const { workerData, parentPort } = require("worker_threads")
+const https = require("https")
+const CancelToken = require("axios").default.CancelToken
 const setIntervalX = require("./../../utils/interval")
 const axios = require("./../../utils/axios")
-const { workerData, parentPort } = require("worker_threads")
+const Checks = require("./../../models/Checks")
 const { handleWorker } = require("./helper")
 
-runCatching(() => {
-    const check = JSON.parse(workerData)
+const mongoose = require("mongoose")
+mongoose.connect('mongodb://localhost:27017/test')
 
-    // define url that will be monitored
-    const { port, protocol, url, timeout, interval } = check
-    const URL = !port ? `${String(protocol).toLowerCase()}://${url}` : `${String(protocol).toLowerCase()}://${url}:${port}`
+const { timeout, interval, _id } = JSON.parse(workerData)
 
-    setIntervalX(interval + timeout, (intervalObj) => {
+setIntervalX(interval + timeout, (intervalObj) => {
+    Checks.findById(_id, null, null, (err, check) => {
+        if (err || !check || !check.isRunning) return clearInterval(intervalObj)
+
+        // define url that will be monitored
+        const { port, protocol, url, authentication, httpHeaders, ignoreSSL } = check
+        const URL = !port ? `${String(protocol).toLowerCase()}://${url}` : `${String(protocol).toLowerCase()}://${url}:${port}`
+
+        // adding headers
+        var headersToBeSent = {}
+
+        if (authentication)
+            headersToBeSent.authorization = "Basic " + Buffer.from(authentication.username + ":" + authentication.password).toString("base64")
+        if (httpHeaders)
+            headersToBeSent = {...headersToBeSent, ...httpHeaders }
+
+        const source = CancelToken.source();
+        setTimeout(() => {
+            source.cancel();
+        }, timeout)
+
+
+        // setting https agent
+        const agent = new https.Agent({
+            rejectUnauthorized: ignoreSSL
+        })
+
+        // making the request
         axios
-            .get(URL)
+            .get(URL, {
+                headers: headersToBeSent,
+                cancelToken: source.token,
+                httpsAgent: agent
+            })
             .then((response) =>
                 handleWorker(response, check, intervalObj, interval)
             )
@@ -22,4 +53,5 @@ runCatching(() => {
                 handleWorker(err, check, intervalObj, interval)
             })
     })
+
 })

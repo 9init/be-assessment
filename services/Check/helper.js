@@ -2,9 +2,6 @@ const Report = require("./../../models/Report")
 const User = require("./../../models/User")
 const Mailer = require("./../Email/mailer")
 const axios = require("axios").default
-const mongoose = require("mongoose")
-
-mongoose.connect('mongodb://localhost:27017/test')
 
 // function used when sending email, whether website is down or up
 const sendMail = (userID, content) => {
@@ -29,7 +26,7 @@ async function handleWorker(response, check, interval, intervalPeriod) {
     Report.findOne({ check_id: check._id }, null, null, (db_err, report) => {
 
         // check if check is exist, otherwise its maybe deleted or invalid id
-        if (db_err || !report) return clearInterval(interval)
+        if (db_err || !report || !check.isRunning) return clearInterval(interval)
 
         // calculate uptime and downtime 
         const uptimeToBeAdded = report.uptime == -1 ? 0 : intervalPeriod + report.uptime

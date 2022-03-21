@@ -1,6 +1,6 @@
-function runCatching(func) {
+async function runCatching(func) {
     try {
-        func()
+        await func()
     } catch (err) {
         console.error(err)
     }
