@@ -33,7 +33,7 @@ Each URL check may have the following options:
   - `authentication.username`
   - `authentication.password`
 - `httpHeaders`: A list of key/value pairs custom HTTP headers to be sent with the polling request (optional).
-- `tags`: A list of the check tags (optional) E.g [{tag: "tag"}, {tag2: "tag"}, ...].
+- `tags`: A list of the check tags (optional) E.g `[{tag: "tag"}, {tag2: "tag"}, ...]`.
 - `ignoreSSL`: A flag to ignore broken/expired SSL certificates in case of using the HTTPS protocol.
 
 ### Report
@@ -48,8 +48,8 @@ Each produced report have the following information:
 - `uptime`: The total time, in millisecond, of the URL uptime.
 - `reaches`: The total tries has successfully reached the URL.
 - `responseTime`: The average response time for the URL in millisecond.
-- `responseTimes`: A list contains response time for each interval E.g. [300, 500, 421, ...].
-- `history`: A list contains timestamped logs of the polling requests E.g. ["bla1", "bla2", ...].
+- `responseTimes`: A list contains response time for each interval E.g. `[300, 500, 421, ...]`.
+- `history`: A list contains timestamped logs of the polling requests E.g. `["bla1", "bla2", ...]`.
 
 ## Setup
 
@@ -106,7 +106,7 @@ The server expects a authenticated POST request at `/update/check/:checkId` path
 - The system ignores any empty field and put the default values
 
 User will receive:
-- A response with **200** status code as a successful PUT process, otherwise we will send you a error message.
+- A response with **200** status code as a successful process, otherwise we will send you a error message.
 
 ### Pause/Start Check
 
@@ -115,14 +115,14 @@ A Feature makes the use pause or start his checks anytime.
 The server expects a authenticated POST request at `/start/check/:checkId` or `/start/check/:checkId` path.
 
 User will receive:
-- A response with **200** status code as a successful PUT process, otherwise we will send you a error message.
+- A response with **200** status code as a successful process, otherwise we will send you a error message.
 
 ### Get a specific check
 
 The server expects a authenticated POST request at `/check/:checkId` path.
 
 User will receive:
-- A response with **200** status code as a successful PUT process, otherwise we will send you a error message.
+- A response with **200** status code as a successful process, otherwise we will send you a error message.
 - A Check Schema contains the check information.
 
 ### Get all checks
@@ -131,7 +131,7 @@ The server expects a authenticated POST request at `/checks` path.
 
 User will receive:
 - A response with **200** status code as a successful process, otherwise we will send you a error message.
-- A List of Check Schema contains the checks information E.g {checks: [Check]}.
+- A List of Check Schema contains the checks information E.g `{checks: [Check]}`.
 
 ### Delete Check
 
@@ -165,7 +165,7 @@ The server expects a authenticated POST request at `/reports` path with JSON or 
 
 User will receive:
 - A response with **200** status code as a successful process, otherwise we will send you a error message.
-- A List of Report Schema contains the reports information E.g {reports: [Report]}.
+- A List of Report Schema contains the reports information E.g `{reports: [Report]}`.
 
 
 ## Docker
