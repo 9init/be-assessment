@@ -56,7 +56,9 @@ Each produced report have the following information:
 We use npm package manager
 - Install node dependencies  `$ npm install`
 - Edit **.env** file to fit your workplace.
+- Run the system  `$ npm start`
 - Run **Unit test** to make sure every thing is fine  `$ npm test`.
+  - You must run the system first before unit testing it
 - Voila.
 
 ## Documentation
@@ -143,7 +145,7 @@ User will receive:
 The server expects a authenticated POST request at `/report/:reportId` path.
 
 User will receive:
-- A response with **200** status code as a successful PUT process, otherwise we will send you a error message.
+- A response with **200** status code as a successful process, otherwise we will send you a error message.
 - A Report Schema contains the report information.
 
 ### Get all reports
