@@ -1,3 +1,4 @@
+require("dotenv").config()
 const { wrapper } = require("axios-cookiejar-support")
 const { CookieJar } = require("tough-cookie")
 const jar = new CookieJar();
@@ -9,13 +10,17 @@ const Report = require("../models/Report")
 const mongoose = require("mongoose")
 
 // Constants
-const hostUrl = "http://localhost:8080"
+const host = process.env.HOST
+const port = process.env.PORT
+const dbUrl = process.env.DB_HOST
+
+const hostUrl = `http://${host}:${port}`
 const registerUrl = hostUrl + "/register"
 const loginUrl = hostUrl + "/login"
 const homeUrl = hostUrl + "/home"
 
 it("Connect to database", (done) => {
-    mongoose.connect('mongodb://localhost:27017/test', (err) => {
+    mongoose.connect(dbUrl, (err) => {
         if (err) throw err
         expect(true).toBe(true)
         done()

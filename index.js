@@ -1,8 +1,11 @@
+require("dotenv").config()
 const express = require("express")
 const mongoose = require("mongoose")
+const host = process.env.HOST
+const port = process.env.PORT
 
 // Connect to database
-mongoose.connect('mongodb://localhost:27017/test')
+mongoose.connect(process.env.DB_HOST)
 
 // Continue old process in any case like server error or shutdown
 const Checks = require("./models/Checks")
@@ -20,4 +23,4 @@ const routers = require("./router/router")
 
 const app = express()
 app.use(routers)
-app.listen(8080, () => console.log("Listening on port 8080"))
+app.listen(port, host, () => console.log(`Listening on port ${port}`))

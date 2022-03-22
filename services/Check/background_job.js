@@ -1,13 +1,13 @@
+require("dotenv").config()
 const { workerData, parentPort } = require("worker_threads")
 const https = require("https")
-const CancelToken = require("axios").default.CancelToken
 const setIntervalX = require("./../../utils/interval")
 const axios = require("./../../utils/axios")
 const Checks = require("./../../models/Checks")
 const { handleWorker } = require("./helper")
 
 const mongoose = require("mongoose")
-mongoose.connect('mongodb://localhost:27017/test')
+mongoose.connect(process.env.DB_HOST)
 
 const { timeout, interval, _id } = JSON.parse(workerData)
 
