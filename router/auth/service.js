@@ -64,14 +64,8 @@ const postRegister = async(req, res) => {
 
             newUser.save((err) => {
                 if (err) return res.status(500).send("Internal server error")
-                Mailer.sendVerification(email, token, (err, info) => {
-                    if (err) {
-                        newUser.delete()
-                        res.status(500).send(`Internal server error: ${err}`)
-                        return
-                    }
-                    res.send("Verify your email, check your inbox.")
-                })
+                Mailer.sendVerification(email, token)
+                res.send("Verify your email, check your inbox.")
             })
 
         })

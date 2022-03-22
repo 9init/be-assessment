@@ -40,7 +40,7 @@ function putCheck(req, res) {
 function getChecks(req, res) {
     Checks.find({ owner_id: req.user.id }, { __v: 0 }, null, (err, result) => {
         if (err) return res.status(500).send({ message: "ERROR" })
-        res.send({ check: result })
+        res.send({ checks: result })
     })
 }
 
@@ -55,7 +55,7 @@ function postUpdateCheck(req, res) {
     const newCheck = generateCheckFromRequest(req).toJSON()
     delete newCheck._id
     Checks.findOneAndUpdate({ owner_id: req.user.id, _id: req.params.checkId }, newCheck, null, (err, oldCheck, db_res) => {
-        if (err || !oldCheck) return res.status(500).send({ message: "ERROR", error: err.message })
+        if (err || !oldCheck) return res.status(500).send({ message: "ERROR", error: err })
         res.send({ message: "UPDATED" })
     })
 
@@ -71,15 +71,16 @@ function postPauseCheck(req, res) {
 
 function startOrPause(req, res, runIt, message) {
     Checks.findOneAndUpdate({ owner_id: req.user.id, _id: req.params.checkId }, { isRunning: runIt }, null, (err, check, db_res) => {
-        if (err || !check) return res.state(500).send({ message: "ERROR DOC" })
+        if (err || !check) return res.status(500).send({ message: "ERROR DOC" })
         if (!check.isRunning && runIt) CheckService.runCheckWorker(check)
         res.send({ message: message })
     })
 }
 
 function deleteCheck(req, res) {
-    Checks.findOneAndRemove({ owner_id: req.user.id, _id: req.body.id }, (err, doc, db_res) => {
-        if (err || !doc) return res.send({ message: "ERROR" })
+    Checks.findOneAndRemove({ owner_id: req.user.id, _id: req.params.checkId }, (err, check, db_res) => {
+        if (err || !check) return res.send({ message: "ERROR" })
+        Report.findOneAndRemove({ check_id: check.id })
         return res.send({ message: "DELETED" })
     })
 }

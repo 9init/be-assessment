@@ -16,14 +16,16 @@ function sendVerification(email, token) {
     sendEmail(email, subject, content)
 }
 
-function sendEmail(email, subject, content) {
+function sendEmail(email, subject, content, callback) {
     message = {
         from: "example@email.com",
         to: email,
         subject: subject,
         text: content
     }
-    transporter.sendMail(message, (err, info) => { if (err) console.log(err) })
+    return transporter.sendMail(message, (err, info) => {
+        if (err) return
+    })
 }
 
 module.exports = {

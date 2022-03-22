@@ -8,9 +8,12 @@ const sendMail = (userID, content) => {
     // getting email of the user
     User.findById(userID, null, null, (err, user) => {
         if (err) return
-        const email = user.email
-        const subject = "Regarding your check <CheckAPI>"
-        Mailer.sendEmail(email, subject, content)
+        try {
+            const email = user.email
+            const subject = "Regarding your check <CheckAPI>"
+            Mailer.sendEmail(email, subject, content)
+        } catch (error) {}
+
     })
 }
 

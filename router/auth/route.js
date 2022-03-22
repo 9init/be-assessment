@@ -22,6 +22,7 @@ router.use(isLoggedIn)
 router.post("/login", service.PostLogin, (req, res) => { res.send({ state: "LOGGED IN" }) })
 router.post("/register", service.PostRegister)
 router.get("/login", service.GetLogin)
+router.get("/home", service.GetLoggedIn)
 router.get("/verify/:token", service.GetVerify)
 
 module.exports = router
